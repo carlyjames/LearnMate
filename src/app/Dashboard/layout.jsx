@@ -2,7 +2,7 @@
 import DashboardClientLayout from './client-layout';
 
 export const metadata = {
-  title: 'Hosppital Management System - Dashboard',
+  title: 'Hospital Management System - Dashboard',
   description: 'Manage your hospital operations efficiently with our comprehensive dashboard.',
 };
 

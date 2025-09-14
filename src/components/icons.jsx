@@ -35,6 +35,7 @@ import {
   Briefcase,
   TicketCheck,
   Tickets,
+  Calendar
 } from 'lucide-react';
 // Remove TypeScript type definition for Icon
 // No need to declare export type Icon = LucideIcon in JSX
@@ -74,6 +75,7 @@ export const Icons = {
   briefcase: Briefcase,
   TicketCheck: TicketCheck,
   Tickets: Tickets,
+  Calendar: Calendar,
   gitHub: (props) => (
     <svg
       aria-hidden="true"

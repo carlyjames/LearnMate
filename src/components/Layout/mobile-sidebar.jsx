@@ -38,10 +38,11 @@ import { useState, useEffect, useContext } from 'react';
 // };
 
 const navItems = [
-    { title: 'Dashboard', href: '/dashboard', icon: 'dashboard', label: 'Dashboard' },
-    { title: 'Sellers', href: '/dashboard/sellers', icon: 'users', label: 'users' },
-    { title: 'Orders', href: '/dashboard/allOrders', icon: 'products', label: 'products' },
-    { title: 'Tickets', href: '/dashboard/tickets', icon: 'Tickets', label: 'Tickets' },
+    { title: 'Overview', href: '/dashboard', icon: 'dashboard', label: 'Dashboard' },
+    { title: 'Patients', href: '/dashboard/sellers', icon: 'users', label: 'users' },
+    { title: 'Appointments', href: '/dashboard/allOrders', icon: 'Calendar', label: 'Calendar' },
+    { title: 'Settings', href: '/dashboard/tickets', icon: 'settings', label: 'Settings' },
+    { title: 'Help Center', href: '/dashboard/tickets', icon: 'Tickets', label: 'Tickets' },
     // { title: 'Vouchers', href: '/dashboard/vouchers', icon: 'TicketCheck', label: 'TicketCheck' },
 
 ]

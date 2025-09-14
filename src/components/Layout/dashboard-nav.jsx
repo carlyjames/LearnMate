@@ -15,9 +15,6 @@ import {
   TooltipTrigger
 } from '../ui/tooltip';
 
-// 070389494 60
-// Removing DashboardNavProps interface
-
 export function DashboardNav({ items, setOpen, isMobileNav = false }) {
   const path = usePathname();
   const { isMinimized } = useSidebar();
@@ -72,7 +69,7 @@ export function DashboardNav({ items, setOpen, isMobileNav = false }) {
       <Tooltip>
         <TooltipTrigger asChild>
           <button
-            className="flex items-center gap-2 overflow-hidden rounded-full p-2 text-sm font-medium text-red hover:bg-red/30 hover:text-red/40"
+            className="flex items-center gap-2 overflow-hidden rounded-full p-2 text-sm font-medium text-red-700 hover:bg-red-300"
             // onClick={Logout} 
           >
             <LogOut className="h-5 w-5" />
@@ -83,7 +80,7 @@ export function DashboardNav({ items, setOpen, isMobileNav = false }) {
             )}
           </button>
         </TooltipTrigger>
-        <TooltipContent align="center" side="right" sideOffset={8} className={!isMinimized ? 'hidden' : 'inline-block'} >
+        <TooltipContent  align="center" side="right" sideOffset={8} className={`${!isMinimized ? 'hidden' : 'inline-block'} text-red-600`}>
           Logout
         </TooltipContent>
       </Tooltip>

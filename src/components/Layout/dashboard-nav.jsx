@@ -38,7 +38,7 @@ export function DashboardNav({ items, setOpen, isMobileNav = false }) {
                   href={item.disabled ? '/' : item.href}
                   className={cn(
                     'flex items-center gap-2 overflow-hidden rounded-full p-2 text-sm text-gray-500 font-medium hover:bg-green/30 hover:text-accent-foreground',
-                    path === item.href ? 'bg-green text-white' : 'transparent',
+                    path === item.href ? 'bg-[#021848] text-white' : 'transparent',
                     item.disabled && 'cursor-not-allowed opacity-80'
                   )}
                   onClick={() => {

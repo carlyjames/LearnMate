@@ -44,13 +44,12 @@ import logo from '../../assets/images/logo.png';
 // };
 
 const navItems = [
-    { title: 'Overview', href: '/dashboard', icon: 'dashboard', label: 'Dashboard' },
+    { title: 'Overview', href: '/Dashboard', icon: 'dashboard', label: 'Dashboard' },
     { title: 'Patients', href: '/Dashboard/patients', icon: 'users', label: 'users' },
-    { title: 'Appointments', href: '/dashboard/allOrders', icon: 'Calendar', label: 'Calendar' },
-    { title: 'Settings', href: '/dashboard/tickets', icon: 'settings', label: 'Settings' },
-    { title: 'Help Center', href: '/dashboard/tickets', icon: 'Tickets', label: 'Tickets' },
-    // { title: 'Vouchers', href: '/dashboard/vouchers', icon: 'TicketCheck', label: 'TicketCheck' },
-
+    { title: 'Appointments', href: '/Dashboard/appointments', icon: 'Calendar', label: 'Calendar' },
+    { title: 'My Appointments', href: '/Dashboard/my-appointments', icon: 'Calendar', label: 'Calendar' },
+    // { title: 'Settings', href: '/Dashboard/settings', icon: 'settings', label: 'Settings' },
+    // { title: 'Help Center', href: '/Dashboard/tickets', icon: 'Tickets', label: 'Tickets' },
 ]
 
 const Sidebar = ({ className }) => {

@@ -9,14 +9,76 @@ import { Eye, Trash2, Filter, X, Check, XIcon, Star, ChevronDown, ChevronRight, 
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import PatientsData from '../../patients.json'
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
 
 const Page = () => {
     return (
         <div className='mx-4'>
-            <Button className='bg-[#021848] flex gap-2 items-center'> 
-                <Plus/> Add New Patient 
-            </Button>
-            
+
+            <Dialog className='bg-black'>
+                <form>
+                    <DialogTrigger asChild>
+                        <Button className='bg-[#021848] flex gap-2 items-center'>
+                            <Plus /> Add New Patient
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                            <DialogTitle>Add a new patient</DialogTitle>
+                            <DialogDescription>
+                                Fill the form below to add a new patient to the system.
+                            </DialogDescription>
+                        </DialogHeader>
+                            <DialogContent>
+                                <form action="" className="flex flex-col gap-2 py-2">
+                                    <div className="flex flex-col">
+                                        <Label className="mb-2 mt-4" htmlFor="name">Patient's Full Name</Label>
+                                        <Input type="text" id="name" placeholder="James Abraham Chinedu" className="w-full" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <Label className="mb-2 mt-4" htmlFor="email">Patient's Email</Label>
+                                        <Input type="email" id="email" placeholder="abrahamjames543@gmail.com" className="w-full" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <Label className="mb-2 mt-4" htmlFor="phone">Patient's Phone Number</Label>
+                                        <Input type="phone" id="phone" placeholder="+ 2 3 4 * * * * * * * * * *" className="w-full" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <Label className="mb-2 mt-4" htmlFor="number">Patient's Age</Label>
+                                        <Input type="number" id="number" placeholder="23" className="w-full" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <Label className="mb-2 mt-4" htmlFor="gender">Patient's Gender</Label>
+                                        <Input type="gender" id="gender" placeholder="Male" className="w-full" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <Label className="mb-2 mt-4" htmlFor="address">Patient's Address</Label>
+                                        <Input type="address" id="address" placeholder="No 21 olawoyin street, mushin, lagos, nIGERIA" className="w-full" />
+                                    </div>
+                                </form>
+                                    <DialogFooter>
+                                        <DialogClose asChild>
+                                            <Button variant="outline">Cancel</Button>
+                                        </DialogClose>
+                                        <Button type="submit">Save changes</Button>
+                                    </DialogFooter>
+                            </DialogContent>
+                    </DialogContent>
+                </form>
+            </Dialog>
+
             <div className="mt-6 border rounded-lg">
                 <div className="relative overflow-auto lg:h-[calc(80vh-80px)] h-[80vh]">
                     <Table className="relative">
@@ -41,7 +103,7 @@ const Page = () => {
                                     Status
                                 </TableHead>
                                 <TableHead className="text-sm font-semibold bg-gray-50 sticky top-0">
-                                    Actions
+                                    Action
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -76,13 +138,12 @@ const Page = () => {
                                     </TableCell>
                                     <TableCell className="font-medium">
                                         <div className="flex gap-3 items-center">
-                                            <Link 
+                                            <Link
                                                 href={`/Dashboard/patients/${patient.patient_id}`}
                                                 title={`View ${patient.name}'s details`}
                                             >
                                                 <Eye className='cursor-pointer text-gray-500 hover:text-blue-600 transition-colors' size={18} />
                                             </Link>
-                                            <SquarePen className='cursor-pointer text-gray-500 hover:text-green-600 transition-colors' size={18} />
                                         </div>
                                     </TableCell>
                                 </TableRow>

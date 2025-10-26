@@ -28,6 +28,7 @@ import AppointmentsIcon from '../../assets/images/AppointmentsIcon.png'
 import Image from 'next/image';
 import Patients from '../metrics/Patients';
 import Appointments from '../metrics/Appointments';
+import Link from 'next/link';
 
 const MetricSkeleton = () => (
   <Card>
@@ -96,18 +97,22 @@ function Page() {
                 </Card>
                 <h1 className='my-3 font-semibold'>Quick Action</h1>
                 <div className='flex lg:flex-row flex-col items-center gap-4'>
-                  <div className='bg-[#F8FAFC] h-[100px] w-full lg:w-[170px] rounded-md'>
-                    <div className='flex flex-col items-center justify-center h-full gap-3 cursor-pointer'>
-                      <Plus className='text-gray-500' />
-                      <h1 className='text-gray-500 text-sm'>Add New Patient</h1>
+                  <Link href='/Dashboard/patients'>
+                    <div className='bg-[#F8FAFC] h-[100px] w-full lg:w-[170px] rounded-md'>
+                      <div className='flex flex-col items-center justify-center h-full gap-3 cursor-pointer'>
+                        <Plus className='text-gray-500' />
+                        <h1 className='text-gray-500 text-sm'>Add New Patient</h1>
+                      </div>
                     </div>
-                  </div>
-                  <div className='bg-[#F8FAFC] h-[100px] w-full lg:w-[170px] rounded-md'>
-                    <div className='flex flex-col items-center justify-center h-full gap-3 cursor-pointer'>
-                      <Calendar className='text-gray-500' />
-                      <h1 className='text-gray-500 text-sm'>Schedule Appointment</h1>
+                  </Link>
+                  <Link href='/Dashboard/appointments'>
+                    <div className='bg-[#F8FAFC] h-[100px] w-full lg:w-[170px] rounded-md'>
+                      <div className='flex flex-col items-center justify-center h-full gap-3 cursor-pointer'>
+                        <Calendar className='text-gray-500' />
+                        <h1 className='text-gray-500 text-sm'>Schedule Appointment</h1>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                   <div className='bg-[#F8FAFC] h-[100px] w-full lg:w-[170px] rounded-md'>
                     <div className='flex flex-col items-center justify-center h-full gap-3 cursor-pointer'>
                       <Server className='text-gray-500' />

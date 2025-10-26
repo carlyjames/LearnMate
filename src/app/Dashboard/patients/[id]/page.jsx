@@ -17,116 +17,60 @@ import { Label } from "@/components/ui/label"
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { ArrowLeft, User, Calendar, Phone, Mail, MapPin, Heart, Activity } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { ArrowLeft, User, Calendar, Phone, Mail, MapPin, Heart, Activity, Clock } from 'lucide-react'
 import dayjs from 'dayjs'
 import PatientsData from '../../../patients.json'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Box, Typography, Chip } from '@mui/material';
-
-// Create a custom theme for black text
-const lightTheme = createTheme({
-    palette: {
-        mode: 'light',
-        primary: {
-            main: '#000000',
-        },
-        text: {
-            primary: '#000000',
-            secondary: '#000000',
-        },
-        background: {
-            default: 'transparent',
-            paper: 'transparent',
-        },
-    },
-    components: {
-        MuiDateCalendar: {
-            styleOverrides: {
-                root: {
-                    color: '#000000',
-                    backgroundColor: 'transparent',
-                },
-            },
-        },
-        MuiPickersCalendarHeader: {
-            styleOverrides: {
-                root: {
-                    color: '#000000',
-                },
-                label: {
-                    color: '#000000',
-                },
-            },
-        },
-        MuiPickersDay: {
-            styleOverrides: {
-                root: {
-                    color: '#000000',
-                    '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                    },
-                    '&.Mui-selected': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                        color: '#000000',
-                        '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.15)',
-                        },
-                    },
-                },
-            },
-        },
-        MuiIconButton: {
-            styleOverrides: {
-                root: {
-                    color: '#000000',
-                },
-            },
-        },
-    },
-});
-
-
+import { toast } from 'sonner'
 
 const Page = () => {
     const params = useParams()
     const router = useRouter()
     const patientId = params?.id
-    const [productModalOpen, setProductModalOpen] = useState(false);
+    const [appointmentModalOpen, setAppointmentModalOpen] = useState(false)
     const patient = PatientsData.find(p => p.patient_id === patientId)
-    const [selectedDates, setSelectedDates] = useState([]);
 
-    const handleDateChange = (newValue) => {
-        if (newValue) {
-            const dateString = newValue.format('YYYY-MM-DD');
+    // Appointment form state
+    const [appointmentData, setAppointmentData] = useState({
+        date: '',
+        time: '',
+        type: '',
+        duration: '30',
+        reason: '',
+        notes: ''
+    })
 
-            // Check if date is already selected
-            const isAlreadySelected = selectedDates.some(
-                date => date.format('YYYY-MM-DD') === dateString
-            );
-
-            if (isAlreadySelected) {
-                // Remove date if already selected
-                setSelectedDates(prev =>
-                    prev.filter(date => date.format('YYYY-MM-DD') !== dateString)
-                );
-            } else {
-                // Add date if not selected
-                setSelectedDates(prev => [...prev, newValue]);
-            }
+    const handleSubmitAppointment = (e) => {
+        e.preventDefault()
+        
+        // Validation
+        if (!appointmentData.date || !appointmentData.time || !appointmentData.type || !appointmentData.reason) {
+            toast.error('Please fill in all required fields')
+            return
         }
-    };
 
-    const removeDateFromSelection = (dateToRemove) => {
-        setSelectedDates(prev =>
-            prev.filter(date =>
-                date.format('YYYY-MM-DD') !== dateToRemove.format('YYYY-MM-DD')
-            )
-        );
-    };
+        console.log('Appointment Data:', {
+            patient_id: patient.patient_id,
+            patient_name: patient.name,
+            ...appointmentData
+        })
 
+        toast.success('Appointment scheduled successfully!')
+        setAppointmentModalOpen(false)
+        
+        // Reset form
+        setAppointmentData({
+            date: '',
+            time: '',
+            type: '',
+            duration: '30',
+            reason: '',
+            notes: ''
+        })
+
+        // Here you would make an API call to save the appointment
+    }
 
     // If patient not found
     if (!patient) {
@@ -154,7 +98,7 @@ const Page = () => {
                 <Button
                     variant='outline'
                     size='icon'
-                    onClick={() => router.push('/dashboard/patients')}
+                    onClick={() => router.push('/Dashboard/patients')}
                     className='rounded-full'
                 >
                     <ArrowLeft className='h-4 w-4' />
@@ -267,7 +211,7 @@ const Page = () => {
                         <CardHeader>
                             <CardTitle>Medical History</CardTitle>
                             <CardDescription>
-                                {''}
+                                Complete medical visit history for this patient
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -298,69 +242,201 @@ const Page = () => {
 
                     {/* Action buttons */}
                     <div className='flex gap-3 mt-6'>
-                        <Button className='bg-[#021848] flex-1'>
-                            Schedule Appointment
-                        </Button>
-                        <Dialog className='bg-black'>
-                            <form>
-                                <DialogTrigger asChild>
-                                    <Button variant='outline' className='flex-1'>
-                                        Edit Patient Details
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[425px]">
+                        <Dialog open={appointmentModalOpen} onOpenChange={setAppointmentModalOpen}>
+                            <DialogTrigger asChild>
+                                <Button className='bg-[#021848] w-full hover:bg-[#021848]/90'>
+                                    <Calendar className='w-4 h-4 mr-2' />
+                                    Schedule Appointment
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+                                <form onSubmit={handleSubmitAppointment}>
                                     <DialogHeader>
-                                        <DialogTitle>Book an appointment</DialogTitle>
+                                        <DialogTitle>Schedule New Appointment</DialogTitle>
                                         <DialogDescription>
-                                            Book appointment for {patient.name} here. Please provide the necessary details and confirm.
+                                            Book an appointment for {patient.name}. Fill in all required details below.
                                         </DialogDescription>
                                     </DialogHeader>
-                                    <ThemeProvider theme={lightTheme}>
-                                        <DialogContent>
-                                            <Box sx={{ color: 'black' }}>
-                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                    <DateCalendar
-                                                        onChange={handleDateChange}
-                                                        sx={{
-                                                            color: 'black',
-                                                            '& .MuiTypography-root': {
-                                                                color: 'black',
-                                                            },
-                                                            '& .MuiSvgIcon-root': {
-                                                                color: 'black',
-                                                            },
-                                                            '& .MuiPickersDay-root': {
-                                                                color: 'black',
-                                                                '&:hover': {
-                                                                    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                                                                },
-                                                            },
-                                                            '& .MuiPickersDay-root.Mui-selected': {
-                                                                backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                                                                color: 'white',
-                                                            },
-                                                        }}
+
+                                    <div className='grid gap-4 py-4'>
+                                        {/* Patient Info Display */}
+                                        <div className='bg-gray-50 rounded-lg p-3 border'>
+                                            <div className='flex items-center gap-3'>
+                                                <div className='w-10 h-10 bg-[#021848] rounded-full flex items-center justify-center'>
+                                                    <User className='w-5 h-5 text-white' />
+                                                </div>
+                                                <div>
+                                                    <p className='font-semibold text-sm'>{patient.name}</p>
+                                                    <p className='text-xs text-gray-500'>
+                                                        {patient.patient_id} • {patient.age}y • {patient.gender}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Date and Time */}
+                                        <div className='grid grid-cols-2 gap-4'>
+                                            <div className='space-y-2'>
+                                                <Label htmlFor='date'>
+                                                    Date <span className='text-red-500'>*</span>
+                                                </Label>
+                                                <div className='relative'>
+                                                    <Calendar className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400' />
+                                                    <Input
+                                                        id='date'
+                                                        type='date'
+                                                        value={appointmentData.date}
+                                                        onChange={(e) => setAppointmentData({...appointmentData, date: e.target.value})}
+                                                        className='pl-10'
+                                                        required
+                                                        min={dayjs().format('YYYY-MM-DD')}
                                                     />
-                                                </LocalizationProvider>
+                                                </div>
+                                            </div>
+                                            <div className='space-y-2'>
+                                                <Label htmlFor='time'>
+                                                    Time <span className='text-red-500'>*</span>
+                                                </Label>
+                                                <div className='relative'>
+                                                    <Clock className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400' />
+                                                    <Input
+                                                        id='time'
+                                                        type='time'
+                                                        value={appointmentData.time}
+                                                        onChange={(e) => setAppointmentData({...appointmentData, time: e.target.value})}
+                                                        className='pl-10'
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                                <DialogFooter>
-                                                    <DialogClose asChild>
-                                                        <Button variant="outline">Cancel</Button>
-                                                    </DialogClose>
-                                                    <Button type="submit">Save changes</Button>
-                                                </DialogFooter>
-                                            </Box>
-                                        </DialogContent>
-                                    </ThemeProvider>
-                                </DialogContent>
-                            </form>
+                                        {/* Appointment Type and Duration */}
+                                        <div className='grid grid-cols-2 gap-4'>
+                                            <div className='space-y-2'>
+                                                <Label htmlFor='type'>
+                                                    Appointment Type <span className='text-red-500'>*</span>
+                                                </Label>
+                                                <Select 
+                                                    value={appointmentData.type}
+                                                    onValueChange={(value) => setAppointmentData({...appointmentData, type: value})}
+                                                    required
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder='Select type' />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value='General Checkup'>
+                                                            <div className='flex items-center gap-2'>
+                                                                <span>🩺</span>
+                                                                <span>General Checkup</span>
+                                                            </div>
+                                                        </SelectItem>
+                                                        <SelectItem value='Follow-up'>
+                                                            <div className='flex items-center gap-2'>
+                                                                <span>🔄</span>
+                                                                <span>Follow-up</span>
+                                                            </div>
+                                                        </SelectItem>
+                                                        <SelectItem value='Consultation'>
+                                                            <div className='flex items-center gap-2'>
+                                                                <span>💬</span>
+                                                                <span>Consultation</span>
+                                                            </div>
+                                                        </SelectItem>
+                                                        <SelectItem value='Prenatal'>
+                                                            <div className='flex items-center gap-2'>
+                                                                <span>🤰</span>
+                                                                <span>Prenatal</span>
+                                                            </div>
+                                                        </SelectItem>
+                                                        <SelectItem value='Emergency'>
+                                                            <div className='flex items-center gap-2'>
+                                                                <span>🚨</span>
+                                                                <span>Emergency</span>
+                                                            </div>
+                                                        </SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            <div className='space-y-2'>
+                                                <Label htmlFor='duration'>Duration</Label>
+                                                <Select 
+                                                    value={appointmentData.duration}
+                                                    onValueChange={(value) => setAppointmentData({...appointmentData, duration: value})}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value='15'>15 minutes</SelectItem>
+                                                        <SelectItem value='30'>30 minutes</SelectItem>
+                                                        <SelectItem value='45'>45 minutes</SelectItem>
+                                                        <SelectItem value='60'>1 hour</SelectItem>
+                                                        <SelectItem value='90'>1.5 hours</SelectItem>
+                                                        <SelectItem value='120'>2 hours</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                        </div>
+
+                                        {/* Reason for Visit */}
+                                        <div className='space-y-2'>
+                                            <Label htmlFor='reason'>
+                                                Reason for Visit <span className='text-red-500'>*</span>
+                                            </Label>
+                                            <Input
+                                                id='reason'
+                                                placeholder='e.g., Annual physical examination, Follow-up for diabetes...'
+                                                value={appointmentData.reason}
+                                                onChange={(e) => setAppointmentData({...appointmentData, reason: e.target.value})}
+                                                required
+                                            />
+                                        </div>
+
+                                        {/* Additional Notes */}
+                                        <div className='space-y-2'>
+                                            <Label htmlFor='notes'>Additional Notes (Optional)</Label>
+                                            <Textarea
+                                                id='notes'
+                                                placeholder='Any special instructions, preparations, or notes for this appointment...'
+                                                value={appointmentData.notes}
+                                                onChange={(e) => setAppointmentData({...appointmentData, notes: e.target.value})}
+                                                rows={4}
+                                                className='resize-none'
+                                            />
+                                        </div>
+
+                                        {/* Summary */}
+                                        {appointmentData.date && appointmentData.time && (
+                                            <div className='bg-blue-50 border border-blue-200 rounded-lg p-3'>
+                                                <p className='text-sm font-semibold text-blue-900 mb-1'>
+                                                    Appointment Summary
+                                                </p>
+                                                <p className='text-xs text-blue-700'>
+                                                    {dayjs(appointmentData.date).format('dddd, MMMM D, YYYY')} at {appointmentData.time}
+                                                    {appointmentData.duration && ` • ${appointmentData.duration} minutes`}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <DialogFooter className='gap-2'>
+                                        <DialogClose asChild>
+                                            <Button type='button' variant='outline'>
+                                                Cancel
+                                            </Button>
+                                        </DialogClose>
+                                        <Button type='submit' className='bg-[#021848] hover:bg-[#021848]/90'>
+                                            Schedule Appointment
+                                        </Button>
+                                    </DialogFooter>
+                                </form>
+                            </DialogContent>
                         </Dialog>
-
                     </div>
                 </div>
             </div>
-
-
         </div>
     )
 }

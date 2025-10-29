@@ -48,8 +48,8 @@ const navItems = [
     { title: 'Patients', href: '/Dashboard/patients', icon: 'users', label: 'users' },
     { title: 'Appointments', href: '/Dashboard/appointments', icon: 'Calendar', label: 'Calendar' },
     { title: 'My Appointments', href: '/Dashboard/my-appointments', icon: 'Calendar', label: 'Calendar' },
-    // { title: 'Settings', href: '/Dashboard/settings', icon: 'settings', label: 'Settings' },
-    // { title: 'Help Center', href: '/Dashboard/tickets', icon: 'Tickets', label: 'Tickets' },
+    { title: 'Delivery Records', href: '/Dashboard/delivery-records', icon: 'Tickets', label: 'Tickets' },
+    { title: 'My Delivery Records', href: '/Dashboard/my-delivery', icon: 'Tickets', label: 'Tickets' },
 ]
 
 const Sidebar = ({ className }) => {

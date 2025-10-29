@@ -20,7 +20,7 @@ const Page = () => {
     const [searchQuery, setSearchQuery] = useState('')
     const [filterStatus, setFilterStatus] = useState('all')
     const [isNewAppointmentOpen, setIsNewAppointmentOpen] = useState(false)
-    
+
     // New appointment form state
     const [newAppointment, setNewAppointment] = useState({
         patient_id: '',
@@ -35,14 +35,14 @@ const Page = () => {
     // Filter appointments based on status
     const filteredAppointments = AppointmentsData.filter(apt => {
         const matchesSearch = apt.patient_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                             apt.appointment_id.toLowerCase().includes(searchQuery.toLowerCase())
+            apt.appointment_id.toLowerCase().includes(searchQuery.toLowerCase())
         const matchesStatus = filterStatus === 'all' || apt.status.toLowerCase() === filterStatus.toLowerCase()
         return matchesSearch && matchesStatus
     })
 
     // Get status badge color
     const getStatusColor = (status) => {
-        switch(status.toLowerCase()) {
+        switch (status.toLowerCase()) {
             case 'scheduled':
                 return 'bg-blue-100 text-blue-700 hover:bg-blue-100'
             case 'completed':
@@ -56,7 +56,7 @@ const Page = () => {
 
     // Get appointment type icon
     const getTypeIcon = (type) => {
-        switch(type.toLowerCase()) {
+        switch (type.toLowerCase()) {
             case 'general checkup':
                 return '🩺'
             case 'follow-up':
@@ -120,9 +120,9 @@ const Page = () => {
                         <div className='grid gap-4 py-4'>
                             <div className='grid gap-2'>
                                 <Label htmlFor='patient'>Patient</Label>
-                                <Select 
-                                    value={newAppointment.patient_id} 
-                                    onValueChange={(value) => setNewAppointment({...newAppointment, patient_id: value})}
+                                <Select
+                                    value={newAppointment.patient_id}
+                                    onValueChange={(value) => setNewAppointment({ ...newAppointment, patient_id: value })}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder='Select patient' />
@@ -139,29 +139,29 @@ const Page = () => {
                             <div className='grid grid-cols-2 gap-4'>
                                 <div className='grid gap-2'>
                                     <Label htmlFor='date'>Date</Label>
-                                    <Input 
-                                        id='date' 
-                                        type='date' 
+                                    <Input
+                                        id='date'
+                                        type='date'
                                         value={newAppointment.date}
-                                        onChange={(e) => setNewAppointment({...newAppointment, date: e.target.value})}
+                                        onChange={(e) => setNewAppointment({ ...newAppointment, date: e.target.value })}
                                     />
                                 </div>
                                 <div className='grid gap-2'>
                                     <Label htmlFor='time'>Time</Label>
-                                    <Input 
-                                        id='time' 
-                                        type='time' 
+                                    <Input
+                                        id='time'
+                                        type='time'
                                         value={newAppointment.time}
-                                        onChange={(e) => setNewAppointment({...newAppointment, time: e.target.value})}
+                                        onChange={(e) => setNewAppointment({ ...newAppointment, time: e.target.value })}
                                     />
                                 </div>
                             </div>
                             <div className='grid grid-cols-2 gap-4'>
                                 <div className='grid gap-2'>
                                     <Label htmlFor='type'>Appointment Type</Label>
-                                    <Select 
+                                    <Select
                                         value={newAppointment.type}
-                                        onValueChange={(value) => setNewAppointment({...newAppointment, type: value})}
+                                        onValueChange={(value) => setNewAppointment({ ...newAppointment, type: value })}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder='Select type' />
@@ -176,9 +176,9 @@ const Page = () => {
                                 </div>
                                 <div className='grid gap-2'>
                                     <Label htmlFor='duration'>Duration (mins)</Label>
-                                    <Select 
+                                    <Select
                                         value={newAppointment.duration}
-                                        onValueChange={(value) => setNewAppointment({...newAppointment, duration: value})}
+                                        onValueChange={(value) => setNewAppointment({ ...newAppointment, duration: value })}
                                     >
                                         <SelectTrigger>
                                             <SelectValue />
@@ -194,20 +194,20 @@ const Page = () => {
                             </div>
                             <div className='grid gap-2'>
                                 <Label htmlFor='reason'>Reason for Visit</Label>
-                                <Input 
-                                    id='reason' 
+                                <Input
+                                    id='reason'
                                     placeholder='Brief description of visit reason'
                                     value={newAppointment.reason}
-                                    onChange={(e) => setNewAppointment({...newAppointment, reason: e.target.value})}
+                                    onChange={(e) => setNewAppointment({ ...newAppointment, reason: e.target.value })}
                                 />
                             </div>
                             <div className='grid gap-2'>
                                 <Label htmlFor='notes'>Additional Notes</Label>
-                                <Textarea 
-                                    id='notes' 
+                                <Textarea
+                                    id='notes'
                                     placeholder='Any additional information...'
                                     value={newAppointment.notes}
-                                    onChange={(e) => setNewAppointment({...newAppointment, notes: e.target.value})}
+                                    onChange={(e) => setNewAppointment({ ...newAppointment, notes: e.target.value })}
                                     rows={3}
                                 />
                             </div>
@@ -216,7 +216,7 @@ const Page = () => {
                             <Button variant='outline' onClick={() => setIsNewAppointmentOpen(false)}>
                                 Cancel
                             </Button>
-                            <Button 
+                            <Button
                                 className='bg-[#021848] hover:bg-[#021848]/90'
                                 onClick={handleCreateAppointment}
                             >
@@ -284,33 +284,29 @@ const Page = () => {
             </div>
 
             {/* Search and Filters */}
-            <Card className='mb-6'>
-                <CardContent className='p-4'>
-                    <div className='flex flex-col md:flex-row gap-4'>
-                        <div className='relative flex-1'>
-                            <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400' />
-                            <Input 
-                                placeholder='Search by patient name or appointment ID...'
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className='pl-10'
-                            />
-                        </div>
-                        <Select value={filterStatus} onValueChange={setFilterStatus}>
-                            <SelectTrigger className='w-full md:w-[200px]'>
-                                <Filter className='w-4 h-4 mr-2' />
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value='all'>All Status</SelectItem>
-                                <SelectItem value='scheduled'>Scheduled</SelectItem>
-                                <SelectItem value='completed'>Completed</SelectItem>
-                                <SelectItem value='cancelled'>Cancelled</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </CardContent>
-            </Card>
+            <div className='flex flex-col md:flex-row gap-4 mb-4'>
+                <div className='relative flex-1'>
+                    <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400' />
+                    <Input
+                        placeholder='Search by patient name or appointment ID...'
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className='pl-10'
+                    />
+                </div>
+                <Select value={filterStatus} onValueChange={setFilterStatus}>
+                    <SelectTrigger className='w-full md:w-[200px]'>
+                        <Filter className='w-4 h-4 mr-2' />
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value='all'>All Status</SelectItem>
+                        <SelectItem value='scheduled'>Scheduled</SelectItem>
+                        <SelectItem value='completed'>Completed</SelectItem>
+                        <SelectItem value='cancelled'>Cancelled</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
 
             {/* Appointments Table */}
             <Card>
@@ -360,7 +356,7 @@ const Page = () => {
                                             </TableCell>
                                             <TableCell>
                                                 <div className='flex items-center gap-2'>
-                                                    <span>{getTypeIcon(appointment.type)}</span>
+                                                    {/* <span>{getTypeIcon(appointment.type)}</span> */}
                                                     <span>{appointment.type}</span>
                                                 </div>
                                             </TableCell>
@@ -372,8 +368,8 @@ const Page = () => {
                                             </TableCell>
                                             <TableCell>
                                                 <Link href={`/Dashboard/appointments/${appointment.appointment_id}`}>
-                                                    <Button 
-                                                        variant='ghost' 
+                                                    <Button
+                                                        variant='ghost'
                                                         size='sm'
                                                         className='hover:bg-blue-50'
                                                     >

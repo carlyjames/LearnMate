@@ -431,11 +431,10 @@ const Page = () => {
                 {/* Right Column - Tabs */}
                 <div className='lg:col-span-2'>
                     <Tabs defaultValue='overview' className='w-full'>
-                        <TabsList className='grid w-full grid-cols-4'>
+                        <TabsList className='grid w-full grid-cols-3'>
                             <TabsTrigger value='overview'>Overview</TabsTrigger>
                             <TabsTrigger value='prescriptions'>Prescriptions</TabsTrigger>
                             <TabsTrigger value='tests'>Test Results</TabsTrigger>
-                            <TabsTrigger value='files'>Files</TabsTrigger>
                         </TabsList>
 
                         {/* Overview Tab */}
@@ -646,9 +645,9 @@ const Page = () => {
                                                     <div className='flex justify-between items-start mb-2'>
                                                         <h4 className='font-semibold text-sm'>{test.test_name}</h4>
                                                         <Badge variant='outline' className={
-                                                            test.status === 'Normal' ? 'border-green-600 text-green-600' :
-                                                            test.status === 'Abnormal' ? 'border-red-600 text-red-600' :
-                                                            'border-yellow-600 text-yellow-600'
+                                                            test.status === 'Normal' ? 'border-green-600 text-green-600 p-1' :
+                                                            test.status === 'Abnormal' ? 'border-red-600 text-red-600 p-1' :
+                                                            'border-yellow-600 text-yellow-600 p-1'
                                                         }>
                                                             {test.status}
                                                         </Badge>
@@ -671,73 +670,7 @@ const Page = () => {
                             </Card>
                         </TabsContent>
 
-                        {/* Files Tab */}
-                        <TabsContent value='files' className='space-y-4'>
-                            <Card>
-                                <CardHeader>
-                                    <div className='flex items-center justify-between'>
-                                        <CardTitle>Uploaded Files</CardTitle>
-                                        <Label htmlFor='file-upload' className='cursor-pointer'>
-                                            <Button size='sm' className='bg-[#021848]' asChild>
-                                                <span>
-                                                    <Upload className='w-4 h-4 mr-2' />
-                                                    Upload Files
-                                                </span>
-                                            </Button>
-                                            <Input 
-                                                id='file-upload'
-                                                type='file'
-                                                multiple
-                                                onChange={handleFileUpload}
-                                                className='hidden'
-                                            />
-                                        </Label>
-                                    </div>
-                                </CardHeader>
-                                <CardContent>
-                                    {uploadedFiles.length > 0 ? (
-                                        <div className='space-y-3'>
-                                            {uploadedFiles.map((file, index) => (
-                                                <div key={index} className='border rounded-lg p-4 flex items-center justify-between'>
-                                                    <div className='flex items-center gap-3'>
-                                                        <div className='w-10 h-10 bg-blue-100 rounded flex items-center justify-center'>
-                                                            <FileText className='w-5 h-5 text-blue-600' />
-                                                        </div>
-                                                        <div>
-                                                            <p className='text-sm font-medium'>{file.name}</p>
-                                                            <p className='text-xs text-gray-500'>{file.size} • {dayjs(file.uploadDate).format('MMM D, YYYY')}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className='flex gap-2'>
-                                                        <Button variant='ghost' size='sm'>
-                                                            <Download className='w-4 h-4' />
-                                                        </Button>
-                                                        <Button 
-                                                            variant='ghost' 
-                                                            size='sm'
-                                                            className='text-red-600 hover:text-red-700 hover:bg-red-50'
-                                                            onClick={() => {
-                                                                const updated = uploadedFiles.filter((_, i) => i !== index)
-                                                                setUploadedFiles(updated)
-                                                                toast.success('File removed')
-                                                            }}
-                                                        >
-                                                            <Trash2 className='w-4 h-4' />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className='text-center py-12'>
-                                            <Upload className='w-12 h-12 mx-auto mb-3 text-gray-300' />
-                                            <p className='text-sm text-gray-500'>No files uploaded yet</p>
-                                            <p className='text-xs text-gray-400 mt-1'>Upload lab results, X-rays, or other medical documents</p>
-                                        </div>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
+ 
                     </Tabs>
                 </div>
             </div>

@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar, Clock, Eye, Search, CalendarDays, User, FileText, MapPin } from 'lucide-react'
 import Link from 'next/link'
@@ -10,7 +12,7 @@ import dayjs from 'dayjs'
 import AppointmentsData from '../../appointments.json'
 
 // For demo purposes - in real app, get this from auth context/session
-const CURRENT_PATIENT_ID = 'P001' // John Doe
+const CURRENT_PATIENT_ID = 'P004' // John Doe
 
 const Page = () => {
     const [searchQuery, setSearchQuery] = useState('')
@@ -80,24 +82,7 @@ const Page = () => {
                 <p className='text-sm text-gray-500 mt-1'>View your scheduled and past appointments</p>
             </div>
 
-            {/* Patient Info Banner */}
-            {patientInfo && (
-                <Card className='mb-6 bg-gradient-to-r from-[#021848] to-[#032a6e]'>
-                    <CardContent className='p-6'>
-                        <div className='flex items-center gap-4 text-white'>
-                            <div className='w-16 h-16 bg-white/20 rounded-full flex items-center justify-center'>
-                                <User className='w-8 h-8' />
-                            </div>
-                            <div>
-                                <h2 className='text-2xl font-bold'>{patientInfo.name}</h2>
-                                <p className='text-sm text-white/80'>
-                                    {patientInfo.age} years • {patientInfo.gender}
-                                </p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            )}
+
 
             {/* Stats Cards */}
             <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-6'>
@@ -211,15 +196,189 @@ const Page = () => {
                                             </div>
                                         )}
                                     </div>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <div className='flex md:flex-col gap-2'>
+                                                <Button className='w-full bg-[#021848] hover:bg-[#021848]/90'>
+                                                    <Eye className='w-4 h-4 mr-2' />
+                                                    View Details
+                                                </Button>
+                                            </div>
+                                        </DialogTrigger>
 
-                                    <div className='flex md:flex-col gap-2'>
-                                        <Link href={`/patient/appointments/${appointment.appointment_id}`} className='flex-1 md:flex-none'>
-                                            <Button className='w-full bg-[#021848] hover:bg-[#021848]/90'>
-                                                <Eye className='w-4 h-4 mr-2' />
-                                                View Details
-                                            </Button>
-                                        </Link>
-                                    </div>
+                                        <DialogContent className='max-w-4xl max-h-[90vh] overflow-y-auto'>
+                                            <DialogHeader>
+                                                <DialogTitle className='text-2xl'>Appointment Details</DialogTitle>
+                                            </DialogHeader>
+
+                                            {/* Remove DialogDescription to avoid nesting issues */}
+                                            <div className='mt-4'>
+                                                <Tabs defaultValue='overview' className='w-full'>
+                                                    <TabsList className='grid w-full grid-cols-3'>
+                                                        <TabsTrigger value='overview'>Overview</TabsTrigger>
+                                                        <TabsTrigger value='prescriptions'>
+                                                            Prescriptions
+                                                        </TabsTrigger>
+                                                        <TabsTrigger value='tests'>
+                                                            Test Results
+                                                        </TabsTrigger>
+                                                    </TabsList>
+
+                                                    {/* Overview Tab */}
+                                                    <TabsContent value='overview' className='space-y-4 mt-4'>
+                                                        <Card className='shadow-none'>
+                                                            <CardHeader>
+                                                                <CardTitle className='text-base'>Appointment Information</CardTitle>
+                                                            </CardHeader>
+                                                            <CardContent className='space-y-3'>
+                                                                <div className='grid grid-cols-2 gap-4'>
+                                                                    <div>
+                                                                        <span className='text-xs text-gray-500'>Date</span>
+                                                                        <p className='text-sm font-medium'>{dayjs(appointment.date).format('MMMM D, YYYY')}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span className='text-xs text-gray-500'>Time</span>
+                                                                        <p className='text-sm font-medium'>{appointment.time}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span className='text-xs text-gray-500'>Duration</span>
+                                                                        <p className='text-sm font-medium'>{appointment.duration}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span className='text-xs text-gray-500'>Doctor</span>
+                                                                        <p className='text-sm font-medium'>{appointment.doctor}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </CardContent>
+                                                        </Card>
+
+                                                        <Card className='shadow-none'>
+                                                            <CardHeader>
+                                                                <CardTitle className='text-base'>Reason for Visit</CardTitle>
+                                                            </CardHeader>
+                                                            <CardContent>
+                                                                <p className='text-sm text-gray-700'>{appointment.reason}</p>
+                                                            </CardContent>
+                                                        </Card>
+
+                                                        <Card className='shadow-none'>
+                                                            <CardHeader>
+                                                                <CardTitle className='text-base flex items-center gap-2'>
+                                                                    Vital Signs
+                                                                </CardTitle>
+                                                            </CardHeader>
+                                                            <CardContent>
+                                                                {appointment.vitals && (appointment.vitals.blood_pressure || appointment.vitals.temperature || appointment.vitals.heart_rate || appointment.vitals.weight) ? (
+                                                                    <div className='grid grid-cols-2 gap-4'>
+                                                                        {appointment.vitals.blood_pressure && (
+                                                                            <div>
+                                                                                <span className='text-xs text-gray-500'>Blood Pressure</span>
+                                                                                <p className='text-sm font-medium'>{appointment.vitals.blood_pressure}</p>
+                                                                            </div>
+                                                                        )}
+                                                                        {appointment.vitals.temperature && (
+                                                                            <div>
+                                                                                <span className='text-xs text-gray-500'>Temperature</span>
+                                                                                <p className='text-sm font-medium'>{appointment.vitals.temperature}</p>
+                                                                            </div>
+                                                                        )}
+                                                                        {appointment.vitals.heart_rate && (
+                                                                            <div>
+                                                                                <span className='text-xs text-gray-500'>Heart Rate</span>
+                                                                                <p className='text-sm font-medium'>{appointment.vitals.heart_rate}</p>
+                                                                            </div>
+                                                                        )}
+                                                                        {appointment.vitals.weight && (
+                                                                            <div>
+                                                                                <span className='text-xs text-gray-500'>Weight</span>
+                                                                                <p className='text-sm font-medium'>{appointment.vitals.weight}</p>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                ) : (
+                                                                    <p className='text-sm text-gray-500'>No vitals recorded yet</p>
+                                                                )}
+                                                            </CardContent>
+                                                        </Card>
+
+                                                        {appointment.notes && (
+                                                            <Card className='shadow-none'>
+                                                                <CardHeader>
+                                                                    <CardTitle className='text-base'>Doctor's Notes</CardTitle>
+                                                                </CardHeader>
+                                                                <CardContent>
+                                                                    <p className='text-sm text-gray-700'>{appointment.notes}</p>
+                                                                </CardContent>
+                                                            </Card>
+                                                        )}
+                                                    </TabsContent>
+
+                                                    {/* Prescriptions Tab */}
+                                                    <TabsContent value='prescriptions' className='space-y-4 mt-4'>
+                                                        {appointment.prescriptions && appointment.prescriptions.length > 0 ? (
+                                                            <div className='space-y-3'>
+                                                                {appointment.prescriptions.map((prescription, index) => (
+                                                                    <div key={index} className='border rounded-lg p-4 '>
+                                                                        <h4 className='font-semibold text-sm mb-2'>{prescription.medication}</h4>
+                                                                        <div className='space-y-1'>
+                                                                            <p className='text-xs text-gray-600'>
+                                                                                <span className='font-medium'>Dosage:</span> {prescription.dosage}
+                                                                            </p>
+                                                                            <p className='text-xs text-gray-600'>
+                                                                                <span className='font-medium'>Duration:</span> {prescription.duration}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <div className='text-center py-8'>
+                                                                <p className='text-sm text-gray-500'>No prescriptions available</p>
+                                                            </div>
+                                                        )}
+                                                    </TabsContent>
+
+                                                    {/* Test Results Tab */}
+                                                    <TabsContent value='tests' className='space-y-4 mt-4'>
+                                                        {appointment.test_results && appointment.test_results.length > 0 ? (
+                                                            <div className='space-y-3'>
+                                                                {appointment.test_results.map((test, index) => (
+                                                                    <div key={index} className='border rounded-lg p-4'>
+                                                                        <div className='flex justify-between items-start mb-2'>
+                                                                            <h4 className='font-semibold text-sm'>{test.test_name}</h4>
+                                                                            <Badge
+                                                                                variant='outline'
+                                                                                className={
+                                                                                    test.status === 'Normal' ? 'border-green-600 text-green-600 p-1' :
+                                                                                        test.status === 'Abnormal' ? 'border-red-600 text-red-600 p-1' :
+                                                                                            'border-yellow-600 text-yellow-600 p-1'
+                                                                                }
+                                                                            >
+                                                                                {test.status}
+                                                                            </Badge>
+                                                                        </div>
+                                                                        <p className='text-sm text-gray-700 mb-1'>
+                                                                            <span className='font-medium'>Result:</span> {test.result}
+                                                                        </p>
+                                                                        <p className='text-xs text-gray-500'>
+                                                                            {dayjs(test.date).format('MMM D, YYYY')}
+                                                                        </p>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <div className='text-center py-8'>
+                                                                <p className='text-sm text-gray-500'>No test results available</p>
+                                                            </div>
+                                                        )}
+
+                                                    </TabsContent>
+                                                </Tabs>
+                                            </div>
+
+                                        </DialogContent>
+                                    </Dialog>
+
                                 </div>
                             </CardContent>
                         </Card>

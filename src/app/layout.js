@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
+import { Providers } from "./Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,17 +14,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Hospital Management System",
-  description: "A comprehensive solution for managing hospital operations efficiently.",
+  title: "Learn Mate",
+  description: "Your Personal Learning Companion",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
+        <Providers>{children}</Providers>
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

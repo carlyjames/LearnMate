@@ -67,8 +67,9 @@ export function UserNav() {
           </Avatar>
           <div className='flex flex-col items-start'>
             <div className='w-full flex items-center justify-between'>
-              <div className='flex items-center gap-2'>
-                <h1 className='font-semibold truncate'>James Abraham</h1>
+              <div className='flex flex-col items-start'>
+                <h1 className='font-semibold truncate'>Stanley Okonkwo</h1>
+                <p className='text-sm text-gray-400 '>Student</p>
               </div>
               {/* {userData?.role === 'seller' ? (
                 <Link href='/dashboard/profile'>

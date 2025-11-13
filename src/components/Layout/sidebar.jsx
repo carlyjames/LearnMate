@@ -44,12 +44,9 @@ import logo from '../../assets/images/logo.png';
 // };
 
 const navItems = [
-    { title: 'Overview', href: '/Dashboard', icon: 'dashboard', label: 'Dashboard' },
-    { title: 'Patients', href: '/Dashboard/patients', icon: 'users', label: 'users' },
-    { title: 'Appointments', href: '/Dashboard/appointments', icon: 'Calendar', label: 'Calendar' },
-    { title: 'My Appointments', href: '/Dashboard/my-appointments', icon: 'Calendar', label: 'Calendar' },
-    { title: 'Delivery Records', href: '/Dashboard/delivery-records', icon: 'Tickets', label: 'Tickets' },
-    { title: 'My Delivery Records', href: '/Dashboard/my-delivery', icon: 'Tickets', label: 'Tickets' },
+    { title: 'Home', href: '/dashboard', icon: 'dashboard', label: 'Dashboard' },
+    { title: 'My Courses', href: '/dashboard/my-courses', icon: 'book', label: 'book' },
+    { title: 'Recommendations', href: '/dashboard/recommendations', icon: 'Calendar', label: 'Calendar' },
 ]
 
 const Sidebar = ({ className }) => {
@@ -77,11 +74,11 @@ const Sidebar = ({ className }) => {
       )}
     >
       {/* Logo section */}
-      <div className="hidden p-5 pt-10 lg:block">
+      {/* <div className="hidden p-5 pt-10 lg:block ">
         <Link href={'/'}>
-          <Image src={logo} width={100} height={100} className='h-[100px] w-[100px] object-contain' alt='logo' />
+          <Image src='/logo.png' width={100} height={100} className=' object-contain' alt='logo' />
         </Link>
-      </div>
+      </div> */}
 
       {/* Toggle button */}
       <ChevronLeft
